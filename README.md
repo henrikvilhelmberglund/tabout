@@ -1,3 +1,7 @@
+# This is a fork
+
+This is a fork of Tabout. Original readme below.
+
 # README
 
 Tab out of quotes, brackets, etc for Visual Studio Code.
