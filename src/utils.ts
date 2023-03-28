@@ -58,6 +58,37 @@ export function determineNextSpecialCharPosition(charInfo: CharacterSet, text:st
     
 }
 
+export function determinePreviousSpecialCharPosition(charInfo: CharacterSet, text:string, position: number) : number
+{
+    let positionPreviousOpenChar = text.lastIndexOf(charInfo.open, position - 1);
+    
+    if(positionPreviousOpenChar == -1)
+    {
+        positionPreviousOpenChar = text.lastIndexOf(charInfo.close, position - 1);
+    }
+    
+    if(positionPreviousOpenChar == -1)
+    {
+        //find first other special character    
+        var strToSearchIn = text.substr(position);
+        var counter = position;
+        for (var char of strToSearchIn.split("").reverse().join(""))
+        {
+            counter--;
+            let info = characterSetsToTabOutFrom().find(c => c.open == char || c.close == char);
+            
+            if(info !== undefined)
+            {
+                positionPreviousOpenChar = counter;
+                break;    
+            }
+        }
+    }
+    
+    return positionPreviousOpenChar;
+    
+}
+
 export function selectNextCharacter(text:string, position:number)
 {
     let nextCharacter = getNextChar(position, text);
@@ -71,4 +102,28 @@ export function selectNextCharacter(text:string, position:number)
         
         //Default
         commands.executeCommand("tab");
+}
+
+export function selectPreviousCharacter(text:string, position:number)
+{
+
+  let positionPreviousOpenChar = text.lastIndexOf("{", position - 1);
+    
+    if(positionPreviousOpenChar == -1)
+    {
+        positionPreviousOpenChar = text.lastIndexOf("(", position - 1);
+    }
+    
+  
+    let previousCharacter = getPreviousChar(position, text);
+        let indxNext = characterSetsToTabOutFrom().find(o => o.open == previousCharacter || o.close == previousCharacter)
+        if( indxNext !== undefined)
+        {
+            //no tab, put selection just BEFORE the next special character 
+            let previousCursorPosition = new Position(window.activeTextEditor.selection.active.line, position-1);
+            return window.activeTextEditor.selection = new Selection(previousCursorPosition,previousCursorPosition );    
+        }
+        
+        //Default
+        // commands.executeCommand("outdent");
 }
