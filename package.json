@@ -1,20 +1,20 @@
 {
-  "name": "TabOut",
+  "name": "tabout-henrikvilhelmberglund",
   "displayName": "TabOut",
   "description": "Tab out of quotes, brackets, etc",
   "version": "0.2.2",
-  "publisher": "albert",
+  "publisher": "henrikvilhelmberglund",
   "engines": {
     "vscode": "^1.22.0"
   },
   "bugs": {
-    "url": "https://github.com/albertromkes/tabout/issues",
-    "email": "albert@rainology.nl"
+    "url": "https://github.com/henrikvilhelmberglund/tabout/issues",
+    "email": "henrikvilhelmberglund@gmail.com"
   },
-  "homepage": "https://github.com/albertromkes/tabout",
+  "homepage": "https://github.com/henrikvilhelmberglund/tabout",
   "repository": {
     "type": "git",
-    "url": "https://github.com/albertromkes/tabout.git"
+    "url": "https://github.com/henrikvilhelmberglund/tabout.git"
   },
   "icon": "images/Tab-Key.jpg",
   "categories": [
@@ -118,6 +118,12 @@
         "command": "tabout",
         "key": "tab",
         "mac": "tab",
+        "when": "editorTextFocus && !suggestWidgetVisible && !inlineSuggestionVisible && !inSnippetMode && !editorHasMultipleSelections"
+      },
+      {
+        "command": "tabin",
+        "key": "shift+tab",
+        "mac": "shift+tab",
         "when": "editorTextFocus && !suggestWidgetVisible && !inlineSuggestionVisible && !inSnippetMode && !editorHasMultipleSelections"
       }
     ]
