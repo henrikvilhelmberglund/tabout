@@ -4,7 +4,7 @@
 import * as vscode from 'vscode';
 import {window, commands, Disposable, ExtensionContext, StatusBarAlignment, StatusBarItem, TextDocument, Selection, Range, Position} from 'vscode';
 import {characterSetsToTabOutFrom} from './charactersToTabOutFrom'
-import {selectNextCharacter, returnHighest, returnLowest, oneNumberIsNegative, getPreviousChar, getNextChar, determineNextSpecialCharPosition} from './utils';
+import {selectPreviousCharacter,selectNextCharacter, returnHighest, returnLowest, oneNumberIsNegative, getPreviousChar, getNextChar, determineNextSpecialCharPosition, determinePreviousSpecialCharPosition} from './utils';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -84,9 +84,77 @@ export function activate(context: vscode.ExtensionContext) {
         //Next character special?
         return selectNextCharacter(currentLineText, currentPositionInLine);
 
-    });
+     });
+  
+     let tabin = vscode.commands.registerCommand('tabin', () => {
+      // The code you place here will be executed every time your command is executed
+      let editor = window.activeTextEditor;
+
+      //vscode.commands.executeCommand("acceptSelectedSuggestion");
+
+      if(!editor)
+          return;
+
+      if(!context.workspaceState.get('tabout-active') ){
+          commands.executeCommand("outdent");
+          return;
+      }
+
+      let currentLineText = editor.document.lineAt(editor.selection.active.line).text;
+       let currentPositionInLine = editor.selection.active.character;
+
+      if(currentPositionInLine == 0) {
+          commands.executeCommand("outdent");
+          return;
+      }
+
+      if(editor.selection.active.character > 0)
+      {
+          var rangeBeforeCurrentPosition = new Range(new Position(editor.selection.active.line, 0), new Position(editor.selection.active.line, currentPositionInLine));
+          var textBeforeCurrentPosition = editor.document.getText(rangeBeforeCurrentPosition);
+          if(textBeforeCurrentPosition.trim() == "")
+          {
+              commands.executeCommand("outdent");
+              return;
+          }
+      }
+
+       //Previous character special?
+       let nextCharacter = getNextChar(currentPositionInLine, currentLineText);
+       let characterInfo = characterSetsToTabOutFrom().find(o => o.open == nextCharacter || o.close == nextCharacter)
+       
+       if(characterInfo !== undefined)
+       {
+         
+         let previousCharacter = getPreviousChar(currentPositionInLine, currentLineText);
+          let indxNext = characterSetsToTabOutFrom().find(o => o.open == previousCharacter || o.close == previousCharacter)
+
+          if(indxNext !== undefined)
+          {
+            console.log("2");  
+               return selectNextCharacter(currentLineText, currentPositionInLine);
+          }
+      }
+
+      if (characterInfo !== undefined) {
+          //no tab, put selection just before the next special character
+          let positionPreviousSpecialCharacter = determinePreviousSpecialCharPosition(characterInfo, currentLineText, currentPositionInLine);
+          if (positionPreviousSpecialCharacter > -1) {
+              //Move cursor
+              let previousCursorPosition = new vscode.Position(editor.selection.active.line, positionPreviousSpecialCharacter);
+            console.log("3");  
+            return editor.selection = new vscode.Selection(previousCursorPosition, previousCursorPosition);
+
+           }
+      }
+
+      //Next character special?
+      return selectPreviousCharacter(currentLineText, currentPositionInLine);
+
+  });
 
     context.subscriptions.push(tabout);
+    context.subscriptions.push(tabin);
 }
 
 // this method is called when your extension is deactivated
