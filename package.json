@@ -2,7 +2,7 @@
   "name": "tabout-henrikvilhelmberglund",
   "displayName": "TabOut",
   "description": "Tab out of quotes, brackets, etc",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "publisher": "henrikvilhelmberglund",
   "engines": {
     "vscode": "^1.22.0"
