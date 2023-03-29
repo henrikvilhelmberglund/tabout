@@ -1,213 +1,208 @@
-import {CharacterSet} from './CharacterSet'
-import {characterSetsToTabOutFrom} from './charactersToTabOutFrom'
-import {window, Position, Selection, commands} from 'vscode';
+import { CharacterSet } from "./CharacterSet";
+import { characterSetsToTabOutFrom } from "./charactersToTabOutFrom";
+import { window, Position, Selection, commands } from "vscode";
 
-export function returnHighest(num1:number, num2:number) : number
-{
-    return num1 > num2 ? num1: num2;
+export function returnHighest(num1: number, num2: number): number {
+  return num1 > num2 ? num1 : num2;
 }
 
-export function returnLowest(num1:number, num2:number) : number
-{
-    return num1 < num2 ? num1: num2;
+export function returnLowest(num1: number, num2: number): number {
+  return num1 < num2 ? num1 : num2;
 }
 
-export function oneNumberIsNegative(num1:number, num2:number) : boolean
-{
-    return (num1 <= -1 || num2 <= -1);    
+export function oneNumberIsNegative(num1: number, num2: number): boolean {
+  return num1 <= -1 || num2 <= -1;
 }
 
-export function getPreviousChar(currentPosition:number, text:string): string
-{
-    return text.substring(currentPosition-1, currentPosition);
+export function getPreviousChar(currentPosition: number, text: string): string {
+  return text.substring(currentPosition - 1, currentPosition);
 }
 
-export function getNextChar(currentPosition:number, text:string): string
-{
-    return text.substring(currentPosition+1, currentPosition);
+export function getNextChar(currentPosition: number, text: string): string {
+  return text.substring(currentPosition + 1, currentPosition);
 }
 
-export function determineNextSpecialCharPosition(charInfo: CharacterSet, text:string, position: number) : number
-{
-    let positionNextOpenChar = text.indexOf(charInfo.open, position + 1);
-    
-    if(positionNextOpenChar == -1)
-    {
-        positionNextOpenChar = text.indexOf(charInfo.close, position + 1);
+export function determineNextSpecialCharPosition(
+  charInfo: CharacterSet,
+  text: string,
+  position: number
+): number {
+  let positionNextOpenChar = text.indexOf(charInfo.open, position + 1);
+
+  if (positionNextOpenChar == -1) {
+    positionNextOpenChar = text.indexOf(charInfo.close, position + 1);
+  }
+
+  if (positionNextOpenChar == -1) {
+    //find first other special character
+    var strToSearchIn = text.substr(position);
+    var counter = position;
+    for (var char of strToSearchIn) {
+      counter++;
+      let info = characterSetsToTabOutFrom().find(
+        (c) => c.open == char || c.close == char
+      );
+
+      if (info !== undefined) {
+        positionNextOpenChar = counter;
+        break;
+      }
     }
-    
-    if(positionNextOpenChar == -1)
-    {
-        //find first other special character    
-        var strToSearchIn = text.substr(position);
-        var counter = position;
-        for (var char of strToSearchIn)
-        {
-            counter++;
-            let info = characterSetsToTabOutFrom().find(c => c.open == char || c.close == char);
-            
-            if(info !== undefined)
-            {
-                positionNextOpenChar = counter;
-                break;    
-            }
-        }
-    }
-    
-    return positionNextOpenChar;
-    
+  }
+
+  return positionNextOpenChar;
 }
 
-export function determinePreviousSpecialCharPosition(charInfo: CharacterSet, text:string, position: number) : number
-{
-    let positionPreviousOpenChar = text.lastIndexOf(charInfo.open, position - 1);
-    
-    if(positionPreviousOpenChar == -1)
-    {
-        positionPreviousOpenChar = text.lastIndexOf(charInfo.close, position - 1);
+export function determinePreviousSpecialCharPosition(
+  charInfo: CharacterSet,
+  text: string,
+  position: number
+): number {
+  let positionPreviousOpenChar = text.lastIndexOf(charInfo.open, position - 1);
+
+  if (positionPreviousOpenChar == -1) {
+    positionPreviousOpenChar = text.lastIndexOf(charInfo.close, position - 1);
+  }
+
+  if (positionPreviousOpenChar == -1) {
+    //find first other special character
+    var strToSearchIn = text.split("").reverse().join("").substr(position);
+    var counter = position;
+    for (var char of strToSearchIn) {
+      counter--;
+      let info = characterSetsToTabOutFrom().find(
+        (c) => c.open == char || c.close == char
+      );
+
+      if (info !== undefined) {
+        positionPreviousOpenChar = counter;
+        break;
+      }
     }
-    
-    if(positionPreviousOpenChar == -1)
-    {
-        //find first other special character    
-        var strToSearchIn = text.split("").reverse().join("").substr(position);
-        var counter = position;
-        for (var char of strToSearchIn)
-        {
-            counter--;
-            let info = characterSetsToTabOutFrom().find(c => c.open == char || c.close == char);
-            
-            if(info !== undefined)
-            {
-                positionPreviousOpenChar = counter;
-                break;    
-            }
-        }
-    }
-    
-    return positionPreviousOpenChar;
-    
+  }
+
+  return positionPreviousOpenChar;
 }
 
-export function selectNextCharacter(text:string, position:number)
-{
-
+export function selectNextCharacter(text: string, position: number) {
   let positionNextOpenChar = text.indexOf("(", position);
   let foundChar;
-  
+
   if (positionNextOpenChar) {
     foundChar = "(";
   }
-  
-  if(positionNextOpenChar == -1)
-  {
+
+  if (positionNextOpenChar == -1) {
     positionNextOpenChar = text.indexOf(")", position);
     if (positionNextOpenChar) {
       foundChar = ")";
     }
   }
-  if(positionNextOpenChar == -1)
-  {
+  if (positionNextOpenChar == -1) {
     positionNextOpenChar = text.indexOf("{", position);
     if (positionNextOpenChar) {
       foundChar = "{";
     }
   }
-  if(positionNextOpenChar == -1)
-  {
+  if (positionNextOpenChar == -1) {
     positionNextOpenChar = text.indexOf("}", position);
     if (positionNextOpenChar) {
       foundChar = "}";
     }
   }
 
-  if(positionNextOpenChar == -1)
-  {
+  if (positionNextOpenChar == -1) {
     positionNextOpenChar = text.indexOf("<", position);
     if (positionNextOpenChar) {
       foundChar = "<";
     }
   }
-  if(positionNextOpenChar == -1)
-  {
+  if (positionNextOpenChar == -1) {
     positionNextOpenChar = text.indexOf(">", position);
     if (positionNextOpenChar) {
       foundChar = ">";
     }
   }
-  
-    let nextCharacter = getNextChar(position, text);
-        let indxNext = characterSetsToTabOutFrom().find(o => o.open == foundChar || o.close == foundChar)
-        if( indxNext !== undefined)
-        {
-            //no tab, put selection just AFTER the next special character 
-            let nextCursorPosition = new Position(window.activeTextEditor.selection.active.line, positionNextOpenChar+1);
-            return window.activeTextEditor.selection = new Selection(nextCursorPosition,nextCursorPosition );    
-        }
-        
-        //Default
-        commands.executeCommand("tab");
+
+  let nextCharacter = getNextChar(position, text);
+  let indxNext = characterSetsToTabOutFrom().find(
+    (o) => o.open == foundChar || o.close == foundChar
+  );
+  if (indxNext !== undefined) {
+    //no tab, put selection just AFTER the next special character
+    let nextCursorPosition = new Position(
+      window.activeTextEditor.selection.active.line,
+      positionNextOpenChar + 1
+    );
+    return (window.activeTextEditor.selection = new Selection(
+      nextCursorPosition,
+      nextCursorPosition
+    ));
+  }
+
+  //Default
+  commands.executeCommand("tab");
 }
 
-export function selectPreviousCharacter(text:string, position:number)
-{
-
+export function selectPreviousCharacter(text: string, position: number) {
   let positionPreviousOpenChar = text.lastIndexOf("}", position - 1);
   let foundChar;
-  
+
   if (positionPreviousOpenChar) {
     foundChar = "}";
   }
-  
-  if(positionPreviousOpenChar == -1)
-  {
+
+  if (positionPreviousOpenChar == -1) {
     positionPreviousOpenChar = text.lastIndexOf("{", position - 1);
     if (positionPreviousOpenChar) {
       foundChar = "{";
     }
   }
-  if(positionPreviousOpenChar == -1)
-  {
+  if (positionPreviousOpenChar == -1) {
     positionPreviousOpenChar = text.lastIndexOf(")", position - 1);
     if (positionPreviousOpenChar) {
       foundChar = ")";
     }
   }
-  if(positionPreviousOpenChar == -1)
-  {
+  if (positionPreviousOpenChar == -1) {
     positionPreviousOpenChar = text.lastIndexOf("(", position - 1);
     if (positionPreviousOpenChar) {
       foundChar = "(";
     }
   }
-  
-  if(positionPreviousOpenChar == -1)
-  {
+
+  if (positionPreviousOpenChar == -1) {
     positionPreviousOpenChar = text.indexOf(">", position);
     if (positionPreviousOpenChar) {
       foundChar = ">";
     }
   }
-  if(positionPreviousOpenChar == -1)
-  {
+  if (positionPreviousOpenChar == -1) {
     positionPreviousOpenChar = text.indexOf("<", position);
     if (positionPreviousOpenChar) {
       foundChar = "<";
     }
   }
-    
+
   if (positionPreviousOpenChar == -1) {
     positionPreviousOpenChar = 0;
   }
   let previousCharacter = getPreviousChar(position, text);
-        let indxNext = characterSetsToTabOutFrom().find(o => o.open == foundChar || o.close == foundChar)
-        if( indxNext !== undefined)
-        {
-            //no tab, put selection just BEFORE the next special character 
-            let previousCursorPosition = new Position(window.activeTextEditor.selection.active.line, positionPreviousOpenChar);
-          return window.activeTextEditor.selection = new Selection(previousCursorPosition, previousCursorPosition);    
-        }
-        
-        //Default
-        // commands.executeCommand("outdent");
+  let indxNext = characterSetsToTabOutFrom().find(
+    (o) => o.open == foundChar || o.close == foundChar
+  );
+  if (indxNext !== undefined) {
+    //no tab, put selection just BEFORE the next special character
+    let previousCursorPosition = new Position(
+      window.activeTextEditor.selection.active.line,
+      positionPreviousOpenChar
+    );
+    return (window.activeTextEditor.selection = new Selection(
+      previousCursorPosition,
+      previousCursorPosition
+    ));
+  }
+
+  //Default
+  // commands.executeCommand("outdent");
 }
