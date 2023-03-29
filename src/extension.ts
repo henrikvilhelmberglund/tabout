@@ -38,10 +38,10 @@ export function activate(context: vscode.ExtensionContext) {
         let currentLineText = editor.document.lineAt(editor.selection.active.line).text;
         let currentPositionInLine = editor.selection.active.character;
 
-        if(currentPositionInLine == 0) {
-            commands.executeCommand("tab");
-            return;
-        }
+        // if(currentPositionInLine == 0) {
+        //     commands.executeCommand("tab");
+        //     return;
+        // }
 
         if(editor.selection.active.character > 0)
         {
@@ -103,10 +103,10 @@ export function activate(context: vscode.ExtensionContext) {
       let currentLineText = editor.document.lineAt(editor.selection.active.line).text;
        let currentPositionInLine = editor.selection.active.character;
 
-      if(currentPositionInLine == 0) {
-          commands.executeCommand("outdent");
-          return;
-      }
+      // if(currentPositionInLine == 0) {
+      //     commands.executeCommand("outdent");
+      //     return;
+      // }
 
       if(editor.selection.active.character > 0)
       {
@@ -131,8 +131,7 @@ export function activate(context: vscode.ExtensionContext) {
 
           if(indxNext !== undefined)
           {
-            console.log("2");  
-               return selectNextCharacter(currentLineText, currentPositionInLine);
+              //  return selectPreviousCharacter(currentLineText, currentPositionInLine);
           }
       }
 
@@ -142,7 +141,6 @@ export function activate(context: vscode.ExtensionContext) {
           if (positionPreviousSpecialCharacter > -1) {
               //Move cursor
               let previousCursorPosition = new vscode.Position(editor.selection.active.line, positionPreviousSpecialCharacter);
-            console.log("3");  
             return editor.selection = new vscode.Selection(previousCursorPosition, previousCursorPosition);
 
            }
