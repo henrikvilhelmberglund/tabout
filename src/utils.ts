@@ -112,6 +112,19 @@ export function selectNextCharacter(text: string, position: number) {
   }
 
   if (positionNextOpenChar == -1) {
+    positionNextOpenChar = text.indexOf("[", position);
+    if (positionNextOpenChar) {
+      foundChar = "[";
+    }
+  }
+  if (positionNextOpenChar == -1) {
+    positionNextOpenChar = text.indexOf("]", position);
+    if (positionNextOpenChar) {
+      foundChar = "]";
+    }
+  }
+
+  if (positionNextOpenChar == -1) {
     positionNextOpenChar = text.indexOf("<", position);
     if (positionNextOpenChar) {
       foundChar = "<";
@@ -168,6 +181,18 @@ export function selectPreviousCharacter(text: string, position: number) {
     positionPreviousOpenChar = text.lastIndexOf("(", position - 1);
     if (positionPreviousOpenChar) {
       foundChar = "(";
+    }
+  }
+  if (positionPreviousOpenChar == -1) {
+    positionPreviousOpenChar = text.lastIndexOf("]", position - 1);
+    if (positionPreviousOpenChar) {
+      foundChar = "]";
+    }
+  }
+  if (positionPreviousOpenChar == -1) {
+    positionPreviousOpenChar = text.lastIndexOf("[", position - 1);
+    if (positionPreviousOpenChar) {
+      foundChar = "[";
     }
   }
 
