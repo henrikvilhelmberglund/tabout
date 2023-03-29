@@ -1,7 +1,7 @@
 {
-  "name": "tabout-henrikvilhelmberglund",
-  "displayName": "TabOut-henrikvilhelmberglund",
-  "description": "Tab out of quotes, brackets, etc",
+  "name": "tabinout-henrikvilhelmberglund",
+  "displayName": "TabInOut-henrikvilhelmberglund",
+  "description": "Tab in and out of quotes, brackets, etc. Warning: semi broken",
   "version": "0.2.3",
   "publisher": "henrikvilhelmberglund",
   "engines": {
