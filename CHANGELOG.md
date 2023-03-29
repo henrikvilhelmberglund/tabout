@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.2.4](https://github.com/henrikvilhelmberglund/tabout/compare/v0.2.3...v0.2.4) (2023-03-29)
+
+
+### Features
+
+* :memo: add some new text ([f0f4e7e](https://github.com/henrikvilhelmberglund/tabout/commit/f0f4e7e5701a8eaf6090a753aabd2fa2d635cb6f))
+* :sparkles: add postrelease script ([73537dd](https://github.com/henrikvilhelmberglund/tabout/commit/73537dd4000d2e4aa731322e8ebe165e6621ce2e))
+
+
+### Bug Fixes
+
+* :bug: forgot about square brackets ([99e7691](https://github.com/henrikvilhelmberglund/tabout/commit/99e7691fe1061f36fe068241e9b866ac6e7270a6))
+* :rocket: forgot a thingy ([dd1db26](https://github.com/henrikvilhelmberglund/tabout/commit/dd1db2607ea33947eba6a0a78e4d5f50ee77d3e6))
+
 ## 0.2.3 (2023-03-29)
 
 

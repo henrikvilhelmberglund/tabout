@@ -2,7 +2,7 @@
   "name": "tabinout-henrikvilhelmberglund",
   "displayName": "TabInOut-henrikvilhelmberglund",
   "description": "Tab in and out of quotes, brackets, etc. Warning: semi broken",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "publisher": "henrikvilhelmberglund",
   "engines": {
     "vscode": "^1.22.0"
